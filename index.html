@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commission Statement - Source-Based Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header .meta {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .financial-statement {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .statement-header {
+            background: #f9fafb;
+            padding: 15px 20px;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1f2937;
+        }
+
+        .statement-body {
+            padding: 0;
+        }
+
+        .line-item {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s;
+        }
+
+        .line-item:last-child {
+            border-bottom: none;
+        }
+
+        .line-item.expandable {
+            cursor: pointer;
+        }
+
+        .line-item.expandable:hover {
+            background: #f9fafb;
+        }
+
+        .line-main {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            align-items: center;
+        }
+
+        .line-main.total {
+            background: #f3f4f6;
+            font-weight: 600;
+            border-top: 2px solid #d1d5db;
+        }
+
+        .line-main.grand-total {
+            background: #1e3a8a;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 15px 20px;
+        }
+
+        .line-label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .line-amount {
+            font-variant-numeric: tabular-nums;
+            min-width: 120px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .line-details {
+            display: none;
+            background: #fafafa;
+            padding: 15px 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .line-details.expanded {
+            display: block;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .detail-table thead {
+            background: #f3f4f6;
+        }
+
+        .detail-table th {
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #d1d5db;
+        }
+
+        .detail-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .detail-table .amount {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .expand-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .expand-icon.rotated {
+            transform: rotate(90deg);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge.new {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge.renewal {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.bonus {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.deduction {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .amount.positive {
+            color: #059669;
+        }
+
+        .amount.negative {
+            color: #dc2626;
+        }
+
+        .subsection {
+            padding-left: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .reconciliation {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .reconciliation h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+
+        .reconciliation-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #bfdbfe;
+        }
+
+        .reconciliation-line:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            padding-top: 15px;
+            border-top: 2px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Commission Statement</h1>
+            <div class="meta">
+                Associate: #111983748 - John Smith<br>
+                Statement Period: September 17, 2025<br>
+                Statement Frequency: Daily
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- INCOME SECTION -->
+            <div class="financial-statement">
+                <div class="statement-header">💰 COMMISSION INCOME</div>
+                <div class="statement-body">
+                    <!-- New Purchases -->
+                    <div class="line-item expandable" onclick="toggleDetails('new-purchases')">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span class="expand-icon" id="icon-new-purchases">▸</span>
+                                <span>Commissions from New Purchases</span>
+                                <span class="badge new">13 sales</span>
+                            </div>
+                            <div class="line-amount amount positive">$10.44</div>
+                        </div>
+                        <div class="line-details" id="details-new-purchases">
+                            <h4 style="margin-bottom: 10px; color: #374151;">Personal Sales (5 sales)</h4>
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Plan</th>
+                                        <th>Product</th>
+                                        <th class="amount">Premium</th>
+                                        <th class="amount">Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John Doe</td>
+                                        <td>239</td>
+                                        <td>Legal Monthly</td>
+                                        <td class="amount">$130.00</td>
+                                        <td class="amount">$1.32</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jane Smith</td>
+                                        <td>462</td>
+                                        <td>Legal + IDShield</td>
+                                        <td class="amount">$150.00</td>
+                                        <td class="amount">$1.52</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bob Johnson</td>
+                                        <td>239</td>
+                                        <td>Legal Monthly</td>
+                                        <td class="amount">$130.00</td>
+                                        <td class="amount">$1.32</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mary Williams</td>
+                                        <td>462</td>
+                                        <td>Legal + IDShield</td>
+                                        <td class="amount">$120.00</td>
+                                        <td class="amount">$1.22</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tom Brown</td>
+                                        <td>239</td>
+                                        <td>Legal Monthly</td>
+                                        <td class="amount">$120.00</td>
+                                        <td class="amount">$1.22</td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="3">Subtotal - Personal Sales</td>
+                                        <td class="amount">$650.00</td>
+                                        <td class="amount">$6.59</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 20px 0 10px; color: #374151;">Override Commissions from Downline Sales (8 sales)</h4>
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Downline Associate</th>
+                                        <th>Member Name</th>
+                                        <th>Plan</th>
+                                        <th class="amount">Premium</th>
+                                        <th class="amount">Override</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Rodriguez (#112156070)</td>
+                                        <td>Client A</td>
+                                        <td>239</td>
+                                        <td class="amount">$130.00</td>
+                                        <td class="amount">$0.92</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Palache (#112234299)</td>
+                                        <td>Client B</td>
+                                        <td>462</td>
+                                        <td class="amount">$170.00</td>
+                                        <td class="amount">$1.20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Palache (#112234299)</td>
+                                        <td>Client C</td>
+                                        <td>462</td>
+                                        <td class="amount">$170.00</td>
+                                        <td class="amount">$1.20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adonis (#112424882)</td>
+                                        <td>Client D</td>
+                                        <td>239</td>
+                                        <td class="amount">$130.00</td>
+                                        <td class="amount">$0.45</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adonis (#112424882)</td>
+                                        <td>Client E</td>
+                                        <td>239</td>
+                                        <td class="amount">$130.00</td>
+                                        <td class="amount">$0.45</td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="3">Subtotal - Override Commissions</td>
+                                        <td class="amount">$730.00</td>
+                                        <td class="amount">$3.85</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Renewals -->
+                    <div class="line-item expandable" onclick="toggleDetails('renewals')">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span class="expand-icon" id="icon-renewals">▸</span>
+                                <span>Commissions from Renewals</span>
+                                <span class="badge renewal">176 renewals</span>
+                            </div>
+                            <div class="line-amount amount positive">$104.39</div>
+                        </div>
+                        <div class="line-details" id="details-renewals">
+                            <h4 style="margin-bottom: 10px; color: #374151;">Personal Renewals (70 renewals)</h4>
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Plan</th>
+                                        <th>Months Active</th>
+                                        <th class="amount">Premium</th>
+                                        <th class="amount">Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sarah Anderson</td>
+                                        <td>239</td>
+                                        <td>14 months</td>
+                                        <td class="amount">$35.00</td>
+                                        <td class="amount">$0.35</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mike Peterson</td>
+                                        <td>462</td>
+                                        <td>22 months</td>
+                                        <td class="amount">$42.00</td>
+                                        <td class="amount">$0.42</td>
+                                    </tr>
+                                    <tr style="background: #fef2f2;">
+                                        <td>
+                                            <span style="color: #991b1b; font-weight: 600;">⚠️ David Martinez - CANCELLED</span>
+                                            <br>
+                                            <span style="font-size: 12px; color: #6b7280;">Cancelled after 3 months (100% chargeback)</span>
+                                        </td>
+                                        <td>239</td>
+                                        <td>3 months</td>
+                                        <td class="amount">$35.00</td>
+                                        <td class="amount" style="color: #dc2626; font-weight: 600;">-$1.32</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; color: #6b7280; font-style: italic;">
+                                            ... 67 more renewals ...
+                                        </td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="3">Subtotal - Personal Renewals</td>
+                                        <td class="amount">$2,489.00</td>
+                                        <td class="amount">$23.82</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 20px 0 10px; color: #374151;">Organization Renewals by Associate (106 renewals)</h4>
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Downline Associate</th>
+                                        <th>Level</th>
+                                        <th class="amount">Renewals</th>
+                                        <th class="amount">Total Premium</th>
+                                        <th class="amount">Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Rodriguez (#112156070)</td>
+                                        <td>Sr Director</td>
+                                        <td class="amount">26</td>
+                                        <td class="amount">$896.00</td>
+                                        <td class="amount">$1.92</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Palache (#112234299)</td>
+                                        <td>Exec Director</td>
+                                        <td class="amount">65</td>
+                                        <td class="amount">$2,145.00</td>
+                                        <td class="amount">$24.50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adonis (#112424882)</td>
+                                        <td>Director</td>
+                                        <td class="amount">76</td>
+                                        <td class="amount">$2,234.00</td>
+                                        <td class="amount">$10.22</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pratley (#118633791)</td>
+                                        <td>Sr Manager</td>
+                                        <td class="amount">18</td>
+                                        <td class="amount">$862.00</td>
+                                        <td class="amount">$4.99</td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="2">Subtotal - Organization Renewals</td>
+                                        <td class="amount">106</td>
+                                        <td class="amount">$6,137.00</td>
+                                        <td class="amount">$41.64</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 style="margin: 20px 0 10px; color: #374151;">Additional Renewal Earnings</h4>
+                            <div class="subsection">
+                                <div class="reconciliation-line">
+                                    <span>Breakaway Commissions (99 transactions)</span>
+                                    <span>$22.54</span>
+                                </div>
+                                <div class="reconciliation-line">
+                                    <span>Override Renewals (34 transactions)</span>
+                                    <span>$16.39</span>
+                                </div>
+                                <div class="reconciliation-line" style="border-top: 1px solid #d1d5db; padding-top: 10px; margin-top: 10px;">
+                                    <span><strong>Total from Renewals (includes chargeback)</strong></span>
+                                    <span><strong>$104.39</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bonuses -->
+                    <div class="line-item expandable" onclick="toggleDetails('bonuses')">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span class="expand-icon" id="icon-bonuses">▸</span>
+                                <span>Bonus Commissions</span>
+                                <span class="badge bonus">81 bonuses</span>
+                            </div>
+                            <div class="line-amount amount positive">$4.12</div>
+                        </div>
+                        <div class="line-details" id="details-bonuses">
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Bonus Type</th>
+                                        <th>Qualifying Activity</th>
+                                        <th class="amount">Count</th>
+                                        <th class="amount">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Field Leadership Override</td>
+                                        <td>Downline management performance</td>
+                                        <td class="amount">54</td>
+                                        <td class="amount">$2.74</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bronze Achievement Bonus</td>
+                                        <td>Bronze level qualifications</td>
+                                        <td class="amount">11</td>
+                                        <td class="amount">$0.50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Elite Bronze Bonus</td>
+                                        <td>Elite Bronze qualifications</td>
+                                        <td class="amount">5</td>
+                                        <td class="amount">$0.65</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Silver Achievement Bonus</td>
+                                        <td>Silver level qualifications</td>
+                                        <td class="amount">2</td>
+                                        <td class="amount">$0.14</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mama Bonus</td>
+                                        <td>Recruiting activity</td>
+                                        <td class="amount">9</td>
+                                        <td class="amount">$0.09</td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="2">Total Bonuses</td>
+                                        <td class="amount">81</td>
+                                        <td class="amount">$4.12</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cash Residuals -->
+                    <div class="line-item">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span>Cash Residuals (13+ months)</span>
+                            </div>
+                            <div class="line-amount">$0.00</div>
+                        </div>
+                    </div>
+
+                    <!-- Total Income -->
+                    <div class="line-item">
+                        <div class="line-main total">
+                            <div class="line-label">
+                                <strong>Total Commission Income</strong>
+                            </div>
+                            <div class="line-amount amount positive">$118.95</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DEDUCTIONS SECTION -->
+            <div class="financial-statement">
+                <div class="statement-header">➖ DEDUCTIONS</div>
+                <div class="statement-body">
+                    <div class="line-item expandable" onclick="toggleDetails('recovery')">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span class="expand-icon" id="icon-recovery">▸</span>
+                                <span>Advance Recovery (10%)</span>
+                                <span class="badge deduction">from earnings</span>
+                            </div>
+                            <div class="line-amount amount negative">-$10.85</div>
+                        </div>
+                        <div class="line-details" id="details-recovery">
+                            <div class="subsection">
+                                <div class="reconciliation-line">
+                                    <span>Previous Advance Balance</span>
+                                    <span>$0.00</span>
+                                </div>
+                                <div class="reconciliation-line">
+                                    <span>New Advances Paid This Period</span>
+                                    <span>$10.44</span>
+                                </div>
+                                <div class="reconciliation-line">
+                                    <span>Total Earnings This Period</span>
+                                    <span>$108.51</span>
+                                </div>
+                                <div class="reconciliation-line">
+                                    <span>Recovery Applied (10% of earnings)</span>
+                                    <span>-$10.85</span>
+                                </div>
+                                <div class="reconciliation-line">
+                                    <span><strong>Ending Advance Balance</strong></span>
+                                    <span><strong>$0.00</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line-item">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span>Adjustments</span>
+                            </div>
+                            <div class="line-amount">$0.00</div>
+                        </div>
+                    </div>
+
+                    <div class="line-item">
+                        <div class="line-main total">
+                            <div class="line-label">
+                                <strong>Total Deductions</strong>
+                            </div>
+                            <div class="line-amount amount negative">-$10.85</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NET PAYMENT -->
+            <div class="financial-statement">
+                <div class="line-item">
+                    <div class="line-main grand-total">
+                        <div class="line-label">
+                            <strong>NET PAYMENT</strong>
+                        </div>
+                        <div class="line-amount">$108.10</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECONCILIATION -->
+            <div class="reconciliation">
+                <h3>🧮 Payment Reconciliation</h3>
+                <div class="reconciliation-line">
+                    <span>New Purchase Advances</span>
+                    <span>$10.44</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Renewal Earnings (includes -$1.32 chargeback)</span>
+                    <span>$104.39</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Bonus Earnings</span>
+                    <span>$4.12</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Cash Residuals</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Less: Advance Recovery</span>
+                    <span>-$10.85</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span><strong>Net Payment (check amount)</strong></span>
+                    <span><strong>$108.10</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(id) {
+            const details = document.getElementById('details-' + id);
+            const icon = document.getElementById('icon-' + id);
+
+            if (details.classList.contains('expanded')) {
+                details.classList.remove('expanded');
+                icon.classList.remove('rotated');
+            } else {
+                details.classList.add('expanded');
+                icon.classList.add('rotated');
+            }
+        }
+    </script>
+</body>
+</html>
