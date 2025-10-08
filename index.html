@@ -395,7 +395,7 @@
                                 <span>Commissions from Renewals</span>
                                 <span class="badge renewal">176 renewals</span>
                             </div>
-                            <div class="line-amount amount positive">$104.39</div>
+                            <div class="line-amount amount positive">$105.71</div>
                         </div>
                         <div class="line-details" id="details-renewals">
                             <h4 style="margin-bottom: 10px; color: #374151;">Personal Renewals (70 renewals)</h4>
@@ -424,26 +424,15 @@
                                         <td class="amount">$42.00</td>
                                         <td class="amount">$0.42</td>
                                     </tr>
-                                    <tr style="background: #fef2f2;">
-                                        <td>
-                                            <span style="color: #991b1b; font-weight: 600;">⚠️ David Martinez - CANCELLED</span>
-                                            <br>
-                                            <span style="font-size: 12px; color: #6b7280;">Cancelled after 3 months (100% chargeback)</span>
-                                        </td>
-                                        <td>239</td>
-                                        <td>3 months</td>
-                                        <td class="amount">$35.00</td>
-                                        <td class="amount" style="color: #dc2626; font-weight: 600;">-$1.32</td>
-                                    </tr>
                                     <tr>
                                         <td colspan="5" style="text-align: center; color: #6b7280; font-style: italic;">
-                                            ... 67 more renewals ...
+                                            ... 68 more renewals ...
                                         </td>
                                     </tr>
                                     <tr style="font-weight: 600; background: #f3f4f6;">
                                         <td colspan="3">Subtotal - Personal Renewals</td>
-                                        <td class="amount">$2,489.00</td>
-                                        <td class="amount">$23.82</td>
+                                        <td class="amount">$2,524.00</td>
+                                        <td class="amount">$25.14</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -508,9 +497,12 @@
                                     <span>$16.39</span>
                                 </div>
                                 <div class="reconciliation-line" style="border-top: 1px solid #d1d5db; padding-top: 10px; margin-top: 10px;">
-                                    <span><strong>Total from Renewals (includes chargeback)</strong></span>
-                                    <span><strong>$104.39</strong></span>
+                                    <span><strong>Total from Renewals</strong></span>
+                                    <span><strong>$105.71</strong></span>
                                 </div>
+                            </div>
+                            <div style="margin-top: 15px; padding: 12px; background: #fffbeb; border-left: 4px solid #f59e0b; font-size: 13px; color: #374151;">
+                                <strong>Note:</strong> Chargebacks for cancelled memberships are now shown separately in the Recoveries section below.
                             </div>
                         </div>
                     </div>
@@ -592,47 +584,131 @@
                             <div class="line-label">
                                 <strong>Total Commission Income</strong>
                             </div>
-                            <div class="line-amount amount positive">$118.95</div>
+                            <div class="line-amount amount positive">$120.27</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- DEDUCTIONS SECTION -->
+            <!-- RECOVERIES SECTION -->
             <div class="financial-statement">
-                <div class="statement-header">➖ DEDUCTIONS</div>
+                <div class="statement-header">➖ RECOVERIES</div>
                 <div class="statement-body">
                     <div class="line-item expandable" onclick="toggleDetails('recovery')">
                         <div class="line-main">
                             <div class="line-label">
                                 <span class="expand-icon" id="icon-recovery">▸</span>
-                                <span>Advance Recovery (10%)</span>
-                                <span class="badge deduction">from earnings</span>
+                                <span>Advance Recovery (10% of earnings)</span>
+                                <span class="badge deduction">pays down balance</span>
                             </div>
-                            <div class="line-amount amount negative">-$10.85</div>
+                            <div class="line-amount amount negative">-$10.43</div>
                         </div>
                         <div class="line-details" id="details-recovery">
                             <div class="subsection">
                                 <div class="reconciliation-line">
-                                    <span>Previous Advance Balance</span>
-                                    <span>$0.00</span>
-                                </div>
-                                <div class="reconciliation-line">
-                                    <span>New Advances Paid This Period</span>
-                                    <span>$10.44</span>
-                                </div>
-                                <div class="reconciliation-line">
-                                    <span>Total Earnings This Period</span>
+                                    <span>Total Earnings This Period (Renewals + Bonuses)</span>
                                     <span>$108.51</span>
                                 </div>
                                 <div class="reconciliation-line">
-                                    <span>Recovery Applied (10% of earnings)</span>
-                                    <span>-$10.85</span>
+                                    <span>Recovery Rate</span>
+                                    <span>10%</span>
                                 </div>
-                                <div class="reconciliation-line">
-                                    <span><strong>Ending Advance Balance</strong></span>
-                                    <span><strong>$0.00</strong></span>
+                                <div class="reconciliation-line" style="border-top: 1px solid #d1d5db; padding-top: 10px; margin-top: 10px;">
+                                    <span><strong>Recovery Applied (10% of $108.51)</strong></span>
+                                    <span><strong>-$10.43</strong></span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line-item expandable" onclick="toggleDetails('chargebacks')">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span class="expand-icon" id="icon-chargebacks">▸</span>
+                                <span>Chargebacks (cancelled memberships)</span>
+                                <span class="badge deduction">1 cancellation</span>
+                            </div>
+                            <div class="line-amount amount negative">-$1.32</div>
+                        </div>
+                        <div class="line-details" id="details-chargebacks">
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Plan</th>
+                                        <th>Months Active</th>
+                                        <th>Chargeback %</th>
+                                        <th class="amount">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span style="color: #991b1b; font-weight: 600;">⚠️ David Martinez</span>
+                                            <br>
+                                            <span style="font-size: 12px; color: #6b7280;">Membership cancelled during advance period</span>
+                                        </td>
+                                        <td>239</td>
+                                        <td>3 months</td>
+                                        <td>100%</td>
+                                        <td class="amount" style="color: #dc2626; font-weight: 600;">-$1.32</td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="4">Total Chargebacks</td>
+                                        <td class="amount">-$1.32</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 15px; padding: 12px; background: #fef2f2; border-left: 4px solid #dc2626; font-size: 13px; color: #374151;">
+                                <strong>What is a chargeback?</strong><br>
+                                When a membership cancels during the advance period, the remaining unpaid advance is recovered.
+                                The chargeback increases your debit balance and reduces your cash accrued balance.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="line-item expandable" onclick="toggleDetails('nontaken')">
+                        <div class="line-main">
+                            <div class="line-label">
+                                <span class="expand-icon" id="icon-nontaken">▸</span>
+                                <span>Non-Taken Fees</span>
+                                <span class="badge deduction">2 fees</span>
+                            </div>
+                            <div class="line-amount amount negative">-$70.00</div>
+                        </div>
+                        <div class="line-details" id="details-nontaken">
+                            <table class="detail-table">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Plan</th>
+                                        <th>Reason</th>
+                                        <th class="amount">Fee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Jennifer Wilson</td>
+                                        <td>239</td>
+                                        <td>Cancelled before first payment</td>
+                                        <td class="amount">-$35.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Robert Taylor</td>
+                                        <td>462</td>
+                                        <td>Did not convert after sign-up</td>
+                                        <td class="amount">-$35.00</td>
+                                    </tr>
+                                    <tr style="font-weight: 600; background: #f3f4f6;">
+                                        <td colspan="3">Total Non-Taken Fees</td>
+                                        <td class="amount">-$70.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 15px; padding: 12px; background: #eff6ff; border-left: 4px solid #3b82f6; font-size: 13px; color: #374151;">
+                                <strong>What is a Non-Taken Fee?</strong><br>
+                                A $35 fee charged when a membership doesn't convert or cancels before the first payment.
+                                <strong>Exemptions:</strong> Level 6+ associates with 70%+ persistency and 1+ years are exempt from this fee.
                             </div>
                         </div>
                     </div>
@@ -649,9 +725,9 @@
                     <div class="line-item">
                         <div class="line-main total">
                             <div class="line-label">
-                                <strong>Total Deductions</strong>
+                                <strong>Total Recoveries</strong>
                             </div>
-                            <div class="line-amount amount negative">-$10.85</div>
+                            <div class="line-amount amount negative">-$81.75</div>
                         </div>
                     </div>
                 </div>
@@ -664,7 +740,7 @@
                         <div class="line-label">
                             <strong>NET PAYMENT</strong>
                         </div>
-                        <div class="line-amount">$108.10</div>
+                        <div class="line-amount">$38.52</div>
                     </div>
                 </div>
             </div>
@@ -677,8 +753,8 @@
                     <span>$10.44</span>
                 </div>
                 <div class="reconciliation-line">
-                    <span>Renewal Earnings (includes -$1.32 chargeback)</span>
-                    <span>$104.39</span>
+                    <span>Renewal Earnings (before chargeback)</span>
+                    <span>$105.71</span>
                 </div>
                 <div class="reconciliation-line">
                     <span>Bonus Earnings</span>
@@ -688,13 +764,50 @@
                     <span>Cash Residuals</span>
                     <span>$0.00</span>
                 </div>
+                <div class="reconciliation-line" style="border-top: 1px solid #bfdbfe; margin-top: 8px; padding-top: 8px;">
+                    <span><strong>Total Income</strong></span>
+                    <span><strong>$120.27</strong></span>
+                </div>
+                <div class="reconciliation-line" style="margin-top: 8px;">
+                    <span>Less: Advance Recovery (10% of earnings)</span>
+                    <span>-$10.43</span>
+                </div>
                 <div class="reconciliation-line">
-                    <span>Less: Advance Recovery</span>
-                    <span>-$10.85</span>
+                    <span>Less: Chargebacks (cancelled memberships)</span>
+                    <span>-$1.32</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Less: Non-Taken Fees</span>
+                    <span>-$70.00</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Less: Adjustments</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="reconciliation-line" style="border-top: 1px solid #bfdbfe; margin-top: 8px; padding-top: 8px;">
+                    <span><strong>Total Recoveries</strong></span>
+                    <span><strong>-$81.75</strong></span>
                 </div>
                 <div class="reconciliation-line">
                     <span><strong>Net Payment (check amount)</strong></span>
-                    <span><strong>$108.10</strong></span>
+                    <span><strong>$38.52</strong></span>
+                </div>
+            </div>
+
+            <!-- BALANCE SUMMARY -->
+            <div class="reconciliation" style="margin-top: 20px; background: #f0fdf4; border: 2px solid #059669;">
+                <h3 style="color: #059669;">💰 Balance Summary</h3>
+                <div class="reconciliation-line">
+                    <span>Cash Accrued Balance (TVEACB)</span>
+                    <span style="color: #059669; font-weight: 600;">$1,245.67</span>
+                </div>
+                <div class="reconciliation-line">
+                    <span>Advance (Debit) Balance (TVEDRB)</span>
+                    <span style="color: #059669; font-weight: 600;">$0.00</span>
+                </div>
+                <div style="margin-top: 15px; padding: 12px; background: #ecfdf5; border-left: 4px solid #059669; font-size: 13px; color: #374151;">
+                    <strong>Cash Accrued Balance:</strong> Total earned commissions that have accumulated but not yet been paid out.<br>
+                    <strong>Advance (Debit) Balance:</strong> Outstanding balance of commission advances that need to be paid back through future earnings.
                 </div>
             </div>
         </div>
